@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Robot constants and properties -->
+  <xacro:include filename="$(find bbblue_bot_description)/urdf/bbblue_robot_def.xacro" />
+
+  <!-- link name="sonar_link" -->
+  <joint name="sonar_link" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="${sonarOffsetX} 0 -${(casterRadius / 2)}" 
+            rpy="0 0 0"/>
+    <parent link="chassis"/>
+    <child link="sonar_link"/>
+  </joint>
+
+  <link name="sonar_link">
+    <collision>
+      <origin xyz="0 0 0" 
+              rpy="0 0 0"/>
+      <geometry>
+        <box size="${sonarLength} 
+                   ${sonarWidth} 
+                   ${sonarHeight}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" 
+              rpy="0 0 0"/>
+      <geometry>
+        <box size="${sonarLength} 
+                   ${sonarWidth} 
+                   ${sonarHeight}"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <mass value="${sonarMass}" />
+      <origin xyz="0 0 0" 
+              rpy="0 0 0"/>
+      <xacro:box_inertia 
+        m="${sonarMass}" 
+        x="${sonarLength}" 
+        y="${sonarWidth}" 
+        z="${sonarHeight}"/>
+    </inertial>
+  </link>
+</robot>

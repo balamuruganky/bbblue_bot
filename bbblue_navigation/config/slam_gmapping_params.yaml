@@ -1,0 +1,7 @@
+# Config file used by slam_gmapping
+# http://wiki.ros.org/gmapping#Parameters
+
+base_frame: base_footprint
+#odom_frame: odom_gmapping
+#map_frame: map
+#transform_publish_period: 0.0

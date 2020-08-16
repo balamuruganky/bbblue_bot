@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+	<!-- Load robot model -->
+	<param name="robot_description"
+    	   command="$(find xacro)/xacro '$(find bbblue_bot_description)/urdf/bbblue_robot.xacro' --inorder"/>
+
+    <node name="bbblue_bot_base_node" 
+          pkg="bbblue_bot_base" 
+          type="bbblue_bot_base_node"/>
+
+    <!-- Load controller config -->
+    <rosparam command="load" 
+              file="$(find bbblue_bot_control)/config/bbblue_bot_common.yaml"/>
+
+    <node name="controller_spawner_base" 
+          pkg="controller_manager" 
+          type="spawner" 
+          output="screen" 
+          args="bbblue_bot_base_controller"/> 
+
+</launch>

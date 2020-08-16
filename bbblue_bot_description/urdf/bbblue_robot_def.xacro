@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<!-- Constants -->
+	<xacro:property name="PI" value="3.1415926535897931"/>
+
+	<!-- Chassis properties -->
+	<xacro:property name="chassisHeight" value="0.002"/>
+	<xacro:property name="chassisLength" value="0.144"/>
+	<xacro:property name="chassisWidth" value="0.100"/>
+	<xacro:property name="chassisMass" value="1.00"/>
+
+	<!-- Caster wheel properties -->
+	<xacro:property name="casterRadius" value="0.020"/>
+	<xacro:property name="casterMass" value="0.09"/>
+	<xacro:property name="casterOffsetX" value="0.045"/>
+
+	<!-- Differential-drive wheels properties -->
+	<xacro:property name="wheelWidth" value="0.023"/>
+	<xacro:property name="wheelRadius" value="0.032"/>
+	<xacro:property name="wheelMass" value="0.05"/>
+	<xacro:property name="wheelOffsetY" value="0.039"/>
+	<xacro:property name="wheelOffsetX" value="-0.06"/>
+
+	<!-- Ultrasonic sensor -->
+	<xacro:property name="sonarMass" value="0.05"/>
+	<xacro:property name="sonarLength" value="0.007"/>
+	<xacro:property name="sonarWidth" value="0.015"/>
+	<xacro:property name="sonarHeight" value="0.009"/>
+	<xacro:property name="sonarOffsetX" value="0.066"/>
+	<!-- xacro:property name="sonarOffsetZ" value="0.0496"/ -->
+
+</robot>

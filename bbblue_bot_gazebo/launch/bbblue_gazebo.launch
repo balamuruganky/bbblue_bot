@@ -1,0 +1,69 @@
+<?xml version='1.0'?>
+<launch>
+
+	<!-- 
+		these are the arguments you can pass through the launch file, for example paused:=true 
+	-->
+	<arg name="paused" default="false"/>
+	<arg name="use_sim_time" default="true"/>
+	<arg name="gui" default="true"/>
+	<arg name="headless" default="false"/>
+	<arg name="debug" default="false"/>
+
+	<!-- arg name="world" default="$(find turtlebot3_gazebo)/worlds/corridor.world"/ -->
+	<arg name="world" default="$(find gazebo_ros)/worlds/empty.world"/>
+	<arg name="model" default="$(find bbblue_bot_description)/urdf/bbblue_robot.xacro"/>
+
+	<!-- arg name="model" 
+  	   	 default="$(find bbblue_bot_description)/urdf/kbot.xacro"/ -->
+
+	<arg name="rvizconfig" default="$(find bbblue_bot_description)/rviz/bbblue_robot.rviz" />
+
+	<!-- env name="GAZEBO_MODEL_PATH" 
+         value="$(find bbblue_bot_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)"/ -->
+
+	<!-- 
+		Converts the xacro robot information to UDRF and use it as a robot_description parameter
+	-->
+  	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+	<!-- 
+		Launch Gazebo world 
+	-->
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+		<arg name="world_name" value="$(arg world)"/>
+		<arg name="debug" value="$(arg debug)" />
+		<arg name="gui" value="$(arg gui)" />
+		<arg name="paused" value="$(arg paused)"/>
+		<arg name="use_sim_time" value="$(arg use_sim_time)"/>
+		<arg name="headless" value="$(arg headless)"/>
+	</include>
+
+	<!-- 
+		push robot_description to factory and spawn robot in gazebo 
+	-->
+	<node name="urdf_spawner" 
+		  pkg="gazebo_ros" 
+		  type="spawn_model" 
+		  respawn="false"
+		  output="screen"
+ 		  args="-urdf -model bbblue_robot -param robot_description" />
+
+ 	<!-- 
+ 		Open Rviz 
+ 		- required="false" : if the program is closed, the simulation doesn't shutdown 
+ 	-->
+ 	<node name="rviz" 
+    		pkg="rviz" 
+    		type="rviz" 
+    		args="-d $(arg rvizconfig)" 
+    		required="false" />
+
+	<!-- 
+ 		spawn robot and load controllers
+ 	-->
+	<include file="$(find bbblue_bot_control)/launch/bbblue_bot_control.launch">
+		<arg name="model" value="$(arg model)"/>
+	</include>
+
+</launch>

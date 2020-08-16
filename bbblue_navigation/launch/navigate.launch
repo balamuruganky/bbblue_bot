@@ -1,0 +1,53 @@
+<?xml version='1.0'?>
+<launch>
+
+    <!-- arg name="odom_topic" default="/bbblue_movebase_nav/odometry/filtered_map"/>
+    <arg name="cmd_vel_topic" default="/cmd_vel_intermediate" />
+    <arg name="map_topic" default="bbblue_movebase_nav/map" / -->
+
+    <arg name="odom_topic" default="/bbblue_bot/odom"/>
+    <!-- arg name="odom_topic" default="/odometry/filtered_map" / -->
+    <arg name="cmd_vel_topic" default="/bbblue_bot/cmd_vel" />
+    <!--arg name="map_topic" default="/bbblue_bot/map" / -->
+
+    <arg name="rvizconfig"
+         default="$(find bbblue_bot_description)/rviz/navigation.rviz"/>
+
+    <!-- Run slamp_gmapping -->
+    <include file="$(find bbblue_navigation)/launch/slam_gmapping.launch">
+        <arg name="rvizconfig" value="$(arg rvizconfig)"/>
+    </include>
+
+    <!-- include file="$(find bbblue_localization)/launch/localization.launch"></include -->
+
+    <node pkg="move_base"
+          type="move_base"
+          name="move_base"
+          respawn="false"
+          output="screen">
+
+          <rosparam file="$(find bbblue_navigation)/config/costmap_common_params.yaml"
+                    command="load"
+                    ns="global_costmap"/>
+
+          <rosparam file="$(find bbblue_navigation)/config/costmap_common_params.yaml"
+                    command="load"
+                    ns="local_costmap"/>
+
+          <rosparam file="$(find bbblue_navigation)/config/local_costmap_params.yaml"
+                    command="load"/>
+
+          <rosparam file="$(find bbblue_navigation)/config/global_costmap_params.yaml"
+                    command="load"/>
+
+          <rosparam file="$(find bbblue_navigation)/config/base_local_planner_params.yaml"
+                    command="load"/>
+
+          <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+          <remap from="odom" to="$(arg odom_topic)"/>
+          <remap from="scan" to="/bbblue_bot/laser/scan"/>
+          <!-- remap from="map" to="$(arg map_topic)" / -->
+
+    </node>
+
+</launch>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+<node name="bbblue_wheel_odom_node" pkg="bbblue_wheel_odom" type="bbblue_wheel_odom_node" respawn="true">
+</node>
+</launch>

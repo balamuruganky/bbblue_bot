@@ -44,7 +44,7 @@ Visualization Manager:
         Z: 0
       Plane: XY
       Plane Cell Count: 10
-      Reference Frame: base_footprint
+      Reference Frame: base_link
       Value: true
     - Alpha: 0.5
       Class: rviz/RobotModel
@@ -56,7 +56,7 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        base_footprint:
+        base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -171,7 +171,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: base_footprint
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:

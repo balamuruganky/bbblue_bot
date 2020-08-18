@@ -1,0 +1,44 @@
+<?xml version='1.0'?>
+<launch>
+
+    <arg name="odom_topic" default="/odom"/>
+    <arg name="cmd_vel_topic" default="/cmd_vel" />
+    <arg name="scan_topic" default="/scan" />
+    <arg name="map_topic" default="/map" />
+
+    <arg name="base_global_planner_name" default="navfn/NavfnROS" />
+    <arg name="base_local_planner_name" default="base_local_planner/TrajectoryPlannerROS" />
+
+    <node pkg="move_base"
+          type="move_base"
+          name="move_base"
+          respawn="false"
+          output="screen">
+
+          <rosparam file="$(find bbblue_navigation)/config/costmap_common_params.yaml"
+                    command="load"
+                    ns="global_costmap"/>
+
+          <rosparam file="$(find bbblue_navigation)/config/costmap_common_params.yaml"
+                    command="load"
+                    ns="local_costmap"/>
+
+          <rosparam file="$(find bbblue_navigation)/config/local_costmap_params.yaml"
+                    command="load"/>
+
+          <rosparam file="$(find bbblue_navigation)/config/global_costmap_params.yaml"
+                    command="load"/>
+
+          <rosparam file="$(find bbblue_navigation)/config/base_local_planner_params.yaml"
+                    command="load"/>
+
+          <param name="base_global_planner" type="string" value="$(arg base_global_planner_name)" />
+          <param name="base_local_planner" value="$(arg base_local_planner_name)"/>
+
+          <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+          <remap from="odom" to="$(arg odom_topic)"/>
+          <remap from="scan" to="$(arg scan_topic)"/>
+          <remap from="map" to="$(arg map_topic)" />
+    </node>
+
+</launch>

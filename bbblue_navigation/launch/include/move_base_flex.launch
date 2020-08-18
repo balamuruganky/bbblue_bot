@@ -1,0 +1,27 @@
+<?xml version='1.0'?>
+<launch>
+
+  <arg name="odom_topic" default="/odom"/>
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="scan_topic" default="/scan" />
+  <arg name="map_topic" default="/map" />
+
+  <!-- Move Base Flex -->
+  <node pkg="mbf_costmap_nav" type="mbf_costmap_nav" respawn="false" name="move_base_flex" output="screen"> <!-- launch-prefix="gdb -ex run args" --> 
+    <param name="tf_timeout" value="1.5"/>
+    <param name="planner_max_retries" value="3"/>
+    <rosparam file="$(find bbblue_navigation)/config_mbf/planners.yaml" command="load" />
+    <rosparam file="$(find bbblue_navigation)/config_mbf/controllers.yaml" command="load" />
+    <rosparam file="$(find bbblue_navigation)/config_mbf/recovery_behaviors.yaml" command="load" />
+    <rosparam file="$(find bbblue_navigation)/config_mbf/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+    <rosparam file="$(find bbblue_navigation)/config_mbf/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find bbblue_navigation)/config_mbf/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find bbblue_navigation)/config_mbf/local_costmap_params.yaml" command="load" />
+
+    <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+    <remap from="odom" to="$(arg odom_topic)"/>
+    <remap from="scan" to="$(arg scan_topic)"/>
+    <remap from="map" to="$(arg map_topic)" />
+  </node>
+
+</launch>

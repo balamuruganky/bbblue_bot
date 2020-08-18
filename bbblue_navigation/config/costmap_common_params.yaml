@@ -12,11 +12,11 @@ publish_voxel_map: false
 
 footprint: [[0.10, 0.10], [-0.10, 0.10], [-0.10, -0.10], [0.10, -0.10], [0.13, 0]]
 transform_tolerance: 0.2
-footprint_padding: 0.02
+#footprint_padding: 0.02
 inflation_radius: 0.03  # controls how far away the zero cost point is from the obstacle
 cost_scaling_factor: 1 # slope of the cost decay curve with respect to distance from the object. lower makes robot stay further from obstacles
 
 observation_sources: laser_scan_sensor
 
-laser_scan_sensor: {sensor_frame: sonar_link, data_type: LaserScan, topic: /bbblue_bot/laser/scan, marking: true, clearing: true}
+laser_scan_sensor: {sensor_frame: laser_link, data_type: LaserScan, topic: scan, marking: true, clearing: true}
 

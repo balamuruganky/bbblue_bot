@@ -1,20 +1,24 @@
 <?xml version="1.0"?>
 <launch>
-  <rosparam command="load" file="$(find bbblue_localization)/config/ekf_map.yaml" />
-  <rosparam command="load" file="$(find bbblue_localization)/config/ekf_odom.yaml" />
-  <rosparam command="load" file="$(find bbblue_localization)/config/navsat.yaml" />
- 
-  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_odom" clear_params="true">
-    <!-- remap from="odometry/filtered" to="odometry/filtered_odom"/ -->
-  </node>
+  <group ns="/bbblue_bot"> 
+    <rosparam command="load" file="$(find bbblue_localization)/config/ekf_map.yaml" />
+    <rosparam command="load" file="$(find bbblue_localization)/config/ekf_odom.yaml" />
+    <rosparam command="load" file="$(find bbblue_localization)/config/navsat.yaml" />
 
-  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_map" clear_params="true">
-    <remap from="odometry/filtered" to="/odometry/filtered_map"/>
-  </node>
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_odom" clear_params="true">
+      <!-- remap from="odometry/filtered" to="odometry/filtered_odom"/ -->
+    </node>
 
-  <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" clear_params="true" output="screen" >
-      <remap from="odometry/filtered" to="/odometry/filtered_map"/>
-      <remap from="gps/fix" to="/navsat/fix"/>
-      <remap from="imu/data" to="/imu/data"/>
-  </node>
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_map" clear_params="true">
+      <remap from="odometry/filtered" to="odometry/filtered_map"/>
+    </node>
+
+    <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" clear_params="true" output="screen" >
+        <!-- Output -->
+        <remap from="odometry/filtered" to="odometry/filtered_map"/>
+        <!-- Inputs -->
+        <remap from="gps/fix" to="/navsat/fix"/>
+        <remap from="imu/data" to="/imu/data"/>
+    </node>
+  </group>
 </launch>

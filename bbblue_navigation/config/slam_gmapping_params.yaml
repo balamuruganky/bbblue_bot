@@ -1,7 +1,62 @@
 # Config file used by slam_gmapping
 # http://wiki.ros.org/gmapping#Parameters
 
-base_frame: base_footprint
-#odom_frame: odom_gmapping
-#map_frame: map
-#transform_publish_period: 0.0
+# Setting frames ------------
+base_frame: base_link
+map_frame: map
+
+# Process 1 out of every this many scans (set it to a higher number to skip more scans)  -->
+throttle_scans: 5
+map_update_interval: 0.5
+
+# The maximum usable range of the laser. A beam is cropped to this value.  -->
+maxUrange: 3
+
+# The maximum range of the sensor --> 
+# If regions with no obstacles within the range of the sensor should 
+#        appear as free space in the map, set maxUrange < maximum range of 
+#        the real sensor <= maxRange -->
+maxRange: 10
+sigma: 0.05
+kernelSize: 1
+lstep: 0.05
+astep: 0.05
+iterations: 5
+lsigma: 0.075
+ogain: 3.0
+minimumScore: 0.0
+
+# Number of beams to skip in each scan. -->
+lskip: 0
+srr: 0.01
+srt: 0.02
+str: 0.01
+stt: 0.02
+
+# Process a scan each time the robot translates this far  -->
+linearUpdate: 0.1
+
+# Process a scan each time the robot rotates this far  -->
+angularUpdate: 0.05
+
+# Process a scan if the last scan processed is older than the update time in seconds. A value less than zero will turn time based updates off.-->
+temporalUpdate: -1.0
+
+# The Neff based resampling threshol  -->
+resampleThreshold: 0.5
+
+# Number of particles in the filter. default 30  -->
+particles: 10
+
+# Initial map size  -->
+xmin: -10.0
+ymin: -10.0
+xmax: 10.0
+ymax: 10.0
+
+# Processing parameters (resolution of the map)  -->
+delta: 0.02
+llsamplerange: 0.01
+llsamplestep: 0.01
+lasamplerange: 0.005
+lasamplestep: 0.005

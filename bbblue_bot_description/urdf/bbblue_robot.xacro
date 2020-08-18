@@ -4,12 +4,12 @@
   <!-- Robot constants and properties -->
   <xacro:include filename="$(find bbblue_bot_description)/urdf/bbblue_robot_def.xacro" />
   <xacro:include filename="$(find bbblue_bot_description)/urdf/bbblue_robot_material.xacro" />
+  <xacro:include filename="$(find bbblue_bot_description)/urdf/bbblue_robot_wheels.xacro" />
   <!-- bbblue robot gazebo -->
   <xacro:include filename="$(find bbblue_bot_description)/urdf/bbblue_robot.gazebo" />
-  <xacro:include filename="$(find bbblue_bot_description)/urdf/bbblue_robot_wheels.xacro" />
 
   <!-- Base link -->
-  <link name="base_footprint">
+  <link name="base_link">
     <!-- visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -21,7 +21,7 @@
   <!-- Base joint -->
   <joint name="base_footprint_joint" type="fixed">
     <origin xyz="0 0 ${2*casterRadius + chassisHeight}" rpy="0 0 0" />
-    <parent link="base_footprint"/>
+    <parent link="base_link"/>
     <child link="chassis" />
   </joint>
 
@@ -57,53 +57,16 @@
         y="${chassisWidth}" 
         z="${chassisHeight}"/>
     </inertial>
-
-    <visual> 
-      <origin xyz="${casterOffsetX} 0 0" 
-          rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="package://bbblue_bot_description/meshes/caster_wheel.dae" />
-      </geometry>
-      <material name="grey" />
-    </visual>
-
-    <inertial>
-      <origin xyz="${casterOffsetX} 0 0" 
-          rpy="0 0 0"/>
-      <mass value="${casterMass}"/>
-      <xacro:sphere_inertia 
-        m="${casterMass}" 
-        r="${casterRadius}"/>
-    </inertial>
-
-    <collision>
-      <origin xyz="${casterOffsetX} 0 0" 
-          rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="package://bbblue_bot_description/meshes/caster_wheel.dae" />
-      </geometry>
-      <surface>
-        <friction>
-          <ode>
-            <mu>0</mu>
-            <mu2>0</mu2>
-            <slip1>1.0</slip1>
-            <slip2>1.0</slip2>
-          </ode>
-        </friction>
-      </surface>
-    </collision>
-
   </link>
 
   <!-- Caster Joint -->
-  <!-- joint name="caster_joint" type="fixed">
+  <joint name="caster_joint" type="fixed">
     <parent link="chassis"/>
     <child link="caster_wheel"/>
-  </joint -->
+  </joint>
 
   <!-- Caster Wheel -->
-  <!-- link name="caster_wheel">
+  <link name="caster_wheel">
     <collision>
       <origin xyz="${casterOffsetX} 0 0" 
           rpy="0 0 0"/>
@@ -139,11 +102,11 @@
         m="${casterMass}" 
         r="${casterRadius}"/>
     </inertial>
-  </link -->
+  </link>
 
   <!-- Wheel link -->
-  <xacro:wheel lr="left" tY="-1"/>
-  <xacro:wheel lr="right" tY="1"/>
+  <wheel lr="left" tY="-1" parent="chassis"/>
+  <wheel lr="right" tY="1" parent="chassis"/>
 
   <!-- Sensor models -->
   <xacro:include filename="$(find bbblue_bot_description)/urdf/bbblue_robot_sensors.xacro" />

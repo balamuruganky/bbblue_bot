@@ -1,0 +1,11 @@
+global_costmap:
+#  update_frequency: 3.0
+#  static_map: true
+  global_frame: map
+  robot_base_frame: base_link
+  update_frequency: 20
+  publish_frequency: 5
+  width: 20.0
+  height: 20.0
+  static_map: true
+  rolling_window: true

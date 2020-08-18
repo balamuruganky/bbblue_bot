@@ -29,4 +29,5 @@
 	<xacro:property name="sonarOffsetX" value="0.066"/>
 	<!-- xacro:property name="sonarOffsetZ" value="0.0496"/ -->
 
+	<xacro:property name="x_reference_heading" value="90.0" />
 </robot>

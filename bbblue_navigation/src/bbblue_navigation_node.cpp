@@ -19,12 +19,18 @@ int main(int argc, char** argv){
 
     move_base_msgs::MoveBaseGoal goal;
 
+    tf::Quaternion th_target_quat = tf::createQuaternionFromYaw(atof(argv[3]));
+
     goal.target_pose.header.frame_id = "map";
     goal.target_pose.header.stamp = ros::Time::now();
     try{
         goal.target_pose.pose.position.x = atof(argv[1]);
         goal.target_pose.pose.position.y = atof(argv[2]);
-        goal.target_pose.pose.orientation.w = atof(argv[3]);
+        goal.target_pose.pose.position.z = 0.0;
+        goal.target_pose.pose.orientation.x = th_target_quat[0];
+        goal.target_pose.pose.orientation.y = th_target_quat[1];
+        goal.target_pose.pose.orientation.z = th_target_quat[2];
+        goal.target_pose.pose.orientation.w = th_target_quat[3];
        }
     catch(int e){
 

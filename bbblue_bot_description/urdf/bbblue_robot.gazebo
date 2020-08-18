@@ -5,78 +5,23 @@
   <gazebo>
     <plugin name="gazebo_ros_control" 
             filename="libgazebo_ros_control.so">
-      <robotNamespace>/bbblue_bot</robotNamespace>
-      <robotParam>/robot_description</robotParam>
+      <!-- robotNamespace>/bbblue_bot</robotNamespace>
+      <robotParam>/robot_description</robotParam -->
+      <robotNamespace>/</robotNamespace>
+      <legacyModeNS>true</legacyModeNS>
       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     </plugin>
   </gazebo>
 
-  <!--
-    The plugin broadcasts a body's pose and rates through ROS nav_msgs::Odometry message.
-    The plugin broadcasts pose and rate of a body named "chassis" over ROS topic name "bbblue_bot/odom".
-  -->
-  <gazebo>
-    <plugin name="ground_truth" 
-            filename="libgazebo_ros_p3d.so">
-      <frameName>map</frameName>
-      <bodyName>chassis</bodyName>
-      <topicName>/bbblue_bot/odom</topicName>
-      <updateRate>30.0</updateRate>
-      <gaussianNoise>0.0</gaussianNoise>
-    </plugin>
-  </gazebo>
-
-  <!-- Differential drive plugin -->
-  <!-- gazebo>
-    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
-      <legacyMode>false</legacyMode>
-      <alwaysOn>true</alwaysOn>
-      <updateRate>10</updateRate>
-      <leftJoint>left_wheel_hinge</leftJoint>
-      <rightJoint>right_wheel_hinge</rightJoint>
-      <wheelSeparation>0.4</wheelSeparation>
-      <wheelDiameter>0.2</wheelDiameter>
-      <torque>10</torque>
-      <commandTopic>/bbblue_bot/cmd_vel</commandTopic>
-      <odometryTopic>/bbblue_bot/odom</odometryTopic>
-      <odometryFrame>odom</odometryFrame>
-      <robotBaseFrame>base_footprint</robotBaseFrame>
-    </plugin>
+  <!-- gazebo reference="base_link">
+    <turnGravityOff>false</turnGravityOff>
   </gazebo -->
-
-  <gazebo>
-    <plugin name="differential_drive_controller" 
-            filename="libgazebo_ros_diff_drive.so">
-      <robotNamespace>/</robotNamespace>
-      <alwaysOn>true</alwaysOn>
-      <updateRate>100</updateRate>
-      <leftJoint>left_wheel_hinge</leftJoint>
-      <rightJoint>right_wheel_hinge</rightJoint>
-      <wheelSeparation>${chassisWidth-2*wheelOffsetY}</wheelSeparation>
-      <wheelDiameter>${2*wheelRadius}</wheelDiameter>
-      <torque>20</torque>
-      <commandTopic>/bbblue_bot/cmd_vel</commandTopic>
-      <odometryTopic>/bbblue_bot/odom</odometryTopic>
-      <odometryFrame>map</odometryFrame>
-      <robotBaseFrame>base_footprint</robotBaseFrame>
-      <legacyMode>false</legacyMode>
-      <rosDebugLevel>Debug</rosDebugLevel>
-      <publishWheelTF>false</publishWheelTF>
-      <publishOdomTF>false</publishOdomTF>
-      <publishWheelJointState>false</publishWheelJointState>
-      <wheelAcceleration>5</wheelAcceleration>
-      <wheelTorque>20</wheelTorque>
-      <publishTf>1</publishTf>
-      <odometrySource>encoder</odometrySource>
-    </plugin>
-  </gazebo>
 
   <!-- Chassis -->
   <gazebo reference="chassis">
-
     <mu1>0.3</mu1>
     <mu2>0.3</mu2>
-
+    <!--turnGravityOff>false</turnGravityOff-->
     <material>Gazebo/Red</material>
   </gazebo>
 
@@ -95,7 +40,7 @@
   </gazebo>
 
   <!-- Range Sensor -->
-  <!-- gazebo reference="sonar_link">        
+  <!-- gazebo reference="laser_link">        
    <sensor type="ray" name="hr04">
       <pose>0 0 0 0 0 0</pose>
       <update_rate>50</update_rate>
@@ -125,7 +70,7 @@
         <gaussianNoise>0.005</gaussianNoise>
         <updateRate>5</updateRate>
         <topicName>bbblue_bot/range</topicName>
-        <frameName>sonar_link</frameName>
+        <frameName>laser_link</frameName>
         <visualize>true</visualize>
         <radiation>ultrasound</radiation>
         <fov>0.02</fov>
@@ -133,7 +78,8 @@
     </sensor>            
   </gazebo -->
 
-  <gazebo reference="sonar_link">
+  <gazebo reference="laser_link">
+    <!--turnGravityOff>true</turnGravityOff-->
     <sensor type="ray" name="head_hokuyo_sensor">
       <pose>0 0 0 0 0 0</pose>
       <visualize>false</visualize>
@@ -163,11 +109,29 @@
         </noise>
       </ray>
       <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
-        <topicName>/bbblue_bot/laser/scan</topicName>
-        <frameName>sonar_link</frameName>
+        <topicName>/scan</topicName>
+        <frameName>laser_link</frameName>
         <visualize>true</visualize>
       </plugin>
     </sensor>
+  </gazebo>
+
+  <!-- magnetometer meter -->
+  <gazebo>
+      <plugin name="quadrotor_magnetic_sim" filename="libhector_gazebo_ros_magnetic.so">
+        <robotNamespace>/</robotNamespace>
+        <alwaysOn>true</alwaysOn>
+        <updateRate>50.0</updateRate>
+        <bodyName>base_link</bodyName>
+        <topicName>/imu/magnetic_field</topicName>
+        <offset>0 0 0</offset>
+        <drift>0.0 0.0 0.0</drift>
+        <gaussianNoise>1.3e-2 1.3e-2 1.3e-2</gaussianNoise>
+        <declination>-8.542778</declination>
+        <inclination>-35.55</inclination>
+        <magnitude>0.0225676</magnitude>
+        <referenceHeading>${x_reference_heading}</referenceHeading>
+      </plugin>
   </gazebo>
 
   <!-- IMU plugin -->
@@ -175,7 +139,7 @@
     <plugin name="imu_controller" filename="libhector_gazebo_ros_imu.so">
       <robotNamespace>/</robotNamespace>
       <updateRate>50.0</updateRate>
-      <bodyName>base_footprint</bodyName>
+      <bodyName>base_link</bodyName>
       <!--frameId>imu_link</fameId-->
       <topicName>/imu/data</topicName>
       <accelDrift>0.005 0.005 0.005</accelDrift>
@@ -192,16 +156,19 @@
     <plugin name="gps_controller" filename="libhector_gazebo_ros_gps.so">
       <updateRate>5</updateRate>
       <robotNamespace>/</robotNamespace>
-      <bodyName>base_footprint</bodyName>
-      <frameId>base_footprint</frameId>
+      <bodyName>base_link</bodyName>
+      <frameId>base_link</frameId>
       <topicName>/navsat/fix</topicName>
       <velocityTopicName>/navsat/vel</velocityTopicName>
       <referenceLatitude>49.9</referenceLatitude>
       <referenceLongitude>8.9</referenceLongitude>
       <referenceHeading>0</referenceHeading>
       <referenceAltitude>0</referenceAltitude>
-      <gaussianNoise>0.01 0.01 0.1</gaussianNoise> <!-- this is std. dev. not var.-->
+      <referenceHeading>${x_reference_heading}</referenceHeading>
+      <gaussianNoise>0.01 0.01 0.01</gaussianNoise> <!-- this is std. dev. not var.-->
       <drift>0.0001 0.0001 0.0001</drift>
+      <velocityDrift>0 0 0</velocityDrift>
+      <velocityGaussianNoise>0.05 0.05 0.05</velocityGaussianNoise>
     </plugin>
   </gazebo>
 

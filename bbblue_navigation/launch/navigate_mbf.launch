@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<launch>
+
+    <!-- Rviz configuration -->
+    <arg name="rvizconfig"
+         default="$(find bbblue_bot_description)/rviz/navigation_mbf.rviz"/>
+    <arg name="smach" default="true" />
+
+    <!-- Launch Rviz and Gazebo Simulation -->
+    <include file="$(find bbblue_bot_description)/launch/bbblue_robot_gazebo.launch">
+        <arg name="rvizconfig" value="$(arg rvizconfig)"/>
+        <arg name="control_config_file_path" default="$(find bbblue_bot_control)/config/bbblue_bot_control.yaml"/>
+    </include>
+
+    <!-- Launch slam_gmapping -->
+    <include file="$(find bbblue_navigation)/launch/include/slam_gmapping.launch">
+      <arg name="odom_frame_name" value="odom" />
+      <arg name="rvizconfig" value="$(arg rvizconfig)"/>
+    </include>
+
+    <!-- Launch move_base flex -->
+    <include file="$(find bbblue_navigation)/launch/include/move_base_flex.launch">
+      <arg name="odom_topic" value="/bbblue_bot_controller/odom" />
+      <arg name="cmd_vel_topic" value="/bbblue_bot_controller/cmd_vel" />
+      <arg name="map_topic" default="/map" />
+    </include>
+
+    <!-- SMACH Navigation State Machine -->
+    <!-- node if="$(arg smach)" pkg="bbblue_navigation" type="navigation_sm.py" name="navigation_sm" output="screen"/ -->
+
+</launch>

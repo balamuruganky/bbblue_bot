@@ -2,22 +2,21 @@
 <launch>
 
   <!--
-
     roslaunch file for starting the ros_control controllers
-
   -->
-
   <arg name="model" default="$(find bbblue_bot_description)/urdf/bbblue_robot.xacro" />
+
+  <!-- 
+    Converts the xacro robot information to UDRF and use it as a robot_description parameter
+  -->
+  <param name="robot_description" 
+         command="$(find xacro)/xacro --inorder $(arg model)" />
+        <!-- remap from="/joint_states" to="/bbblue_bot/joint_states" /-->
+
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
   <rosparam file="$(find bbblue_bot_control)/config/bbblue_bot_control.yaml"
             command="load"/>
-
-  <!-- 
-  Converts the xacro robot information to UDRF and use it as a robot_description parameter
-  -->
-  <param name="robot_description" 
-       command="$(find xacro)/xacro.py --inorder $(arg model)" />
 
   <!-- load the controllers -->
   <!--
@@ -29,16 +28,15 @@
         respawn="false"
         output="screen"
         ns="/bbblue_bot" 
-        args="joint_state_controller rightWheel_effort_controller leftWheel_effort_controller"
-  / -->
-
-  <node name="controller_spawner" 
-          pkg="controller_manager" 
-          type="spawner"
-          ns="/bbblue_bot"  
-          output="screen" 
-          args="joint_state_controller rightWheel_effort_controller leftWheel_effort_controller"/> 
-
+        args="joint_state_controller "
+  /-->
+  <node name="controller_spawner"
+        pkg="controller_manager"
+        type="spawner" 
+        respawn="false"
+        output="screen"
+        args="joint_state_controller bbblue_bot_base_controller"
+  />
 
 
   <!-- convert joint states to TF transforms for rviz, etc -->
@@ -49,8 +47,5 @@
         pkg="robot_state_publisher" 
         type="robot_state_publisher" 
         respawn="false" 
-        output="screen">
-    <remap from="/joint_states" to="/bbblue_bot/joint_states" />
-  </node>
-
+        output="screen"/>
 </launch>

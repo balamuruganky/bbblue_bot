@@ -1,0 +1,28 @@
+<?xml version='1.0'?>
+<launch>
+
+    <!-- Rviz configuration -->
+    <arg name="rvizconfig"
+         default="$(find bbblue_bot_description)/rviz/navigation.rviz"/>
+
+    <!-- Launch Rviz and Gazebo Simulation -->
+    <include file="$(find bbblue_bot_description)/launch/bbblue_robot_gazebo.launch">
+        <arg name="rvizconfig" value="$(arg rvizconfig)"/>
+    </include>
+
+    <!-- Launch slam_gmapping -->
+    <include file="$(find bbblue_navigation)/launch/include/slam_gmapping.launch">
+      <arg name="odom_frame_name" value="odom" />
+      <arg name="rvizconfig" value="$(arg rvizconfig)"/>
+    </include>
+
+    <!-- Launch move_base -->
+    <include file="$(find bbblue_navigation)/launch/include/move_base.launch">
+      <arg name="odom_topic" value="/bbblue_bot_controller/odom"/>
+      <arg name="cmd_vel_topic" value="/bbblue_bot_controller/cmd_vel" />
+
+      <!-- arg name="base_global_planner_name" value="carrot_planner/CarrotPlanner" / -->
+      <arg name="base_local_planner_name" value="dwa_local_planner/DWAPlannerROS" />
+    </include>
+
+</launch>

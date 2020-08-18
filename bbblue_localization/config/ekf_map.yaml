@@ -6,18 +6,17 @@ ekf_map:
   transform_timeout: 0.0
   print_diagnostics: true
   debug: false
-  #publish_tf: true
-  #transform_time_offset: 0.05
 
   map_frame: map
   odom_frame: odom
-  base_link_frame: base_footprint
+  base_link_frame: base_link
   world_frame: map
 
-# -------------------------------------
-# Wheel odometry:
+  # -------------------------------------
+  # Wheel odometry:
+  # -------------------------------------
 
-  odom0: /bbblue_bot/odom
+  odom0: /bbblue_bot_controller/odom
   odom0_config: [false, false, false,
                  false, false, false,
                  true,  true,  true,
@@ -30,8 +29,9 @@ ekf_map:
 
 # -------------------------------------
 # GPS odometry:
+# -------------------------------------
 
-  odom1: /odometry/gps
+  odom1: /bbblue_bot/odometry/gps
   odom1_config: [true,  true,  false,
                  false, false, false,
                  false, false, false,
@@ -42,20 +42,9 @@ ekf_map:
   odom1_differential: false
   odom1_relative: false
 
-# --------------------------------------
-# imu configure:
-
-#  imu0: /imu/data
-#  imu0_config: [false, false, false,
-#                true,  true, false,
-#                false, false, false,
-#                true,  true,  true,
-#                true,  true,  true]
-#  imu0_nodelay: true
-#  imu0_differential: false
-#  imu0_relative: false
-#  imu0_queue_size: 10
-#  imu0_remove_gravitational_acceleration: true
+  # --------------------------------------
+  # imu configure:
+  # --------------------------------------
 
   imu0: /imu/data
   imu0_config: [false, false, false,

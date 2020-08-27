@@ -57,10 +57,10 @@ IEncoder::~IEncoder() {
 
 float IEncoder::GetAngle() {
 	// Change sign of the sensor reading
-	//int8_t k;
-	//this->position == LEFT? k = -1 : k = 1;
+	int8_t k;
+	this->position == LEFT? k = -1 : k = 1;
 
-	float current_angle = /*k * */read2angle( getRawRotation() );
+	float current_angle = k * read2angle( getRawRotation() );
 
 	return normalize(current_angle - this->initial_angle);
 }

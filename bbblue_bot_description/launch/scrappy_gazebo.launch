@@ -22,6 +22,8 @@
 	<!-- push robot_description to factory and spawn robot in gazebo -->
 	<node name="scrappy_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model scrappy" />
 
+	<arg name="rvizconfig" default="$(find bbblue_bot_description)/rviz/scrappy_robot.rviz" />
+
 	<group if="$(arg show_rviz)">
 		<!-- load joint controller configurations from YAML file to parameter server -->
 		<rosparam command="load" file="$(find bbblue_bot_control)/config/scrappy_control.yaml" />
@@ -34,6 +36,6 @@
 			<param name="publish_frequency" value="50"/>
 		</node>
 
-		<node name="rviz" pkg="rviz" type="rviz" output="screen" />
+		<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" output="screen" />
 	</group>
 </launch>

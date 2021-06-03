@@ -1,0 +1,35 @@
+<?xml version='1.0'?>
+<launch>
+
+    <!-- Rviz configuration -->
+    <arg name="rvizconfig" default="$(find bbblue_bot_description)/rviz/mpc_traj.rviz"/>
+
+    <!-- Launch Rviz and Gazebo Simulation -->
+    <include file="$(find bbblue_bot_description)/launch/scrappy_gazebo.launch">
+        <arg name="rvizconfig" value="$(arg rvizconfig)"/>
+        <arg name="gui" value="false" />
+    </include>
+
+    <!-- Launch slam_gmapping -->
+    <node name="slam_gmapping" pkg="gmapping" type="slam_gmapping" output="screen">
+        <rosparam file="$(find bbblue_navigation)/config/slam_gmapping_params.yaml" />
+        <remap from="scan" to="/scan"/>
+        <remap from="map" to="/map"/>
+    </node>
+
+    <!-- Launch move_base -->
+    <node pkg="move_base" type="move_base" name="move_base" respawn="false" output="screen">
+        <rosparam file="$(find mpc_waypoint_tracking_controller)/params/move_base/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find mpc_waypoint_tracking_controller)/params/move_base/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find mpc_waypoint_tracking_controller)/params/move_base/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find mpc_waypoint_tracking_controller)/params/move_base/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find mpc_waypoint_tracking_controller)/params/mpc_waypoint_tracker_ros_params.yaml" command="load" />
+
+        <param name="base_global_planner" value="waypoints_global_planner/WaypointsGlobalPlanner" />
+        <param name="base_local_planner" value="mpc_waypoint_tracking_controller/MPCWayPointTrackerROS" />
+
+        <remap from="cmd_vel" to="/scrappy_controller/cmd_vel"/>
+        <remap from="odom" to="/scrappy_controller/odom"/>
+    </node>
+
+</launch>
